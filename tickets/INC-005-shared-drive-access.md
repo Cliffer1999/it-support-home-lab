@@ -1,38 +1,29 @@
-# INC-005 — Shared Drive Access Denied
+# INC-005 — Access denied to Finance share
 
-**Priority:** P3 — Medium  
-**Category:** Access / File Services  
-**Status:** Escalated
+**Priority:** P3  
+**Status:** Escalated in practice scenario
 
-## User Report
+### User report
 
-User can access other company resources but receives Access Denied when opening the Finance shared drive.
+The user could open other company resources but got **Access Denied** when opening the Finance shared folder.
 
-## Diagnostic Approach
+### What I checked
 
-1. Confirmed the user was connected to the expected network.
-2. Confirmed other shared resources were reachable.
-3. Confirmed the exact Finance share/path and captured the error.
-4. Determined whether colleagues with approved access could reach the same resource.
-5. Confirmed the user stated that Finance access was required for a new work responsibility.
+- The device was on the expected network.
+- Other shares were reachable.
+- Another authorised user could open the Finance share.
+- The affected user said they needed Finance access for a new responsibility.
 
-## Assessment
+At that point, the network itself looked healthy. The more likely issue was permission / group membership.
 
-Connectivity was healthy and the resource itself was available. The symptoms indicated a likely access/permission requirement rather than a network outage.
+### What I did not do
 
-## L1 Decision
+I did not try to grant access just to make the ticket disappear. In a real environment, Finance permissions should be approved by the resource owner or an authorised identity/admin team.
 
-Did **not** attempt to bypass permissions or grant access without authorisation.
+### Escalation note
 
-## Escalation Note
+> One user unable to access Finance share. Other network resources working and authorised colleague can access the same share. Error is Access Denied. Likely missing group/share permission. Please confirm business approval and update access if appropriate.
 
-**Impact:** One user unable to access Finance shared drive required for work.  
-**Network:** Healthy; other shares accessible.  
-**Resource:** Available to authorised colleague.  
-**Error:** Access Denied.  
-**Suspected cause:** User does not have required security-group/share permission.  
-**Requested action:** Resource owner / identity administrator to validate business approval and assign authorised access if appropriate.
+### V2 follow-up
 
-## Learning Point
-
-Good IT support is not always about fixing the issue personally. Permission changes can have security implications; recognising the boundary of L1 authority is part of correct incident handling.
+I want to reproduce this properly with an AD security group and NTFS/share permissions, then test both an allowed user and a denied user from the Windows client VM.
