@@ -1,55 +1,45 @@
-# INC-002 — Laptop Has No Internet
+# INC-002 — Wi-Fi connected, but websites would not load
 
-**Priority:** P3 — Medium  
-**Category:** Network / Endpoint  
-**Status:** Resolved at L1
+**Priority:** P3  
+**Status:** Resolved in practice scenario
 
-## User Report
+This one was useful because the Wi-Fi icon made it look like the network was fine, but that only proved the laptop was connected to the local wireless network.
 
-Laptop shows Wi-Fi connected but websites do not load.
+### Checks
 
-## Diagnostic Approach
+I first checked whether other devices had internet access. They did, so I treated it as a laptop-specific issue.
 
-### 1. Establish scope
-
-Confirmed other devices on the same network had internet access, suggesting a device-specific problem rather than an office-wide outage.
-
-### 2. Inspect IP configuration
+Then I checked:
 
 ```cmd
 ipconfig /all
-```
-
-Checked for a valid IPv4 address, subnet mask, default gateway, DHCP state and DNS servers.
-
-### 3. Test the network in layers
-
-```cmd
 ping 127.0.0.1
 ping <default-gateway>
 ping 1.1.1.1
 nslookup example.com
 ```
 
-Interpretation:
+What I was trying to separate:
 
-- loopback failure → local TCP/IP issue
-- gateway failure → local adapter/LAN issue
-- external IP works but DNS lookup fails → likely DNS problem
-- external IP fails for multiple devices → possible upstream issue
+- local TCP/IP problem
+- connection to the router
+- internet connectivity
+- DNS/name-resolution problem
 
-## Simulated Finding
+### Finding
 
-The device had valid LAN connectivity but name resolution failed.
+The practice scenario was designed so the laptop could reach the gateway and an external IP address, but DNS lookup failed.
 
-## Resolution
+That made DNS much more likely than a Wi-Fi problem.
 
-Refreshed the client network state and configured the device to obtain the approved DNS settings automatically from DHCP. Retested name resolution.
+### Fix / retest
 
-## Verification
+Returned DNS configuration to the expected DHCP-provided settings and retested `nslookup` and normal web browsing.
 
-Gateway reachable, external IP reachable, DNS lookup successful and websites loaded normally.
+### Ticket note
 
-## Closure Note
+> User connected to Wi-Fi but unable to browse. Other devices unaffected. Gateway and external IP reachable; DNS lookup failed. Restored expected DNS configuration and confirmed name resolution plus normal web access.
 
-Device-specific DNS resolution issue. LAN and internet IP connectivity were available. Restored approved DNS configuration and confirmed successful name resolution and web access.
+### Note to myself
+
+I originally used to think “connected to Wi-Fi” meant “internet should work.” This scenario is a good reminder that LAN connectivity, internet routing and DNS are separate checks.
