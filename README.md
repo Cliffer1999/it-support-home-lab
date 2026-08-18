@@ -1,126 +1,92 @@
 # IT Support Home Lab
 
-A hands-on portfolio project that simulates common Level 1 / Service Desk responsibilities in a small Windows-based business environment.
+I started this repo to practise the kind of problems I would expect to see on a Level 1 Service Desk: Windows issues, basic networking, account access, Microsoft 365 problems and simple PowerShell diagnostics.
 
-The lab focuses on practical troubleshooting, user support, Windows administration, networking, Microsoft 365 scenarios, PowerShell automation, ticket documentation, and escalation decisions.
+The first version was mostly structured notes. I'm now turning it into a more hands-on lab with Windows virtual machines and Active Directory so I can document what I actually configure, break and fix.
 
-## Project Goals
+> This is a learning lab, not production work experience. Any users, devices and tickets in this repo are fictional.
 
-- Demonstrate a structured troubleshooting process instead of random trial-and-error.
-- Practise common Level 1 support scenarios seen in Service Desk environments.
-- Build confidence with Windows, TCP/IP networking, user accounts, Microsoft 365 and PowerShell.
-- Document incidents in a way that another technician can reproduce and understand.
-- Show when an issue should be resolved at L1 and when it should be escalated.
+## What I'm working on now
 
-## Simulated Environment
+### V2 — Windows Server + Active Directory lab
 
-| Component | Lab Setup |
-|---|---|
-| End-user OS | Windows 10 / Windows 11 |
-| Identity | Local users + Microsoft 365 / Entra ID concepts |
-| Productivity | Microsoft 365, Outlook, Teams, OneDrive |
-| Networking | Home router used to simulate office LAN, DHCP and DNS |
-| Support tools | Windows Settings, Event Viewer, Task Manager, Device Manager, Services, CMD, PowerShell |
-| Ticket workflow | Incident logging, priority, diagnosis, resolution, escalation and closure notes |
+Current build plan:
 
-> This repository is a simulated home lab. User names, company names, devices and tickets are fictional and contain no real customer data.
+- [ ] Create a Windows Server VM
+- [ ] Create a Windows 11 client VM
+- [ ] Install Active Directory Domain Services
+- [ ] Promote the server to a domain controller
+- [ ] Create a small fictional company domain
+- [ ] Create users, groups and organisational units
+- [ ] Join the Windows 11 VM to the domain
+- [ ] Test password reset / account lockout workflows
+- [ ] Create a shared folder and test group-based permissions
+- [ ] Add one simple Group Policy
+- [ ] Capture screenshots and command output from the real lab
 
-## Repository Structure
+The setup notes are here: [Active Directory Lab Build](v2-active-directory/README.md)
 
-```text
-it-support-home-lab/
-├── README.md
-├── docs/
-│   ├── lab-environment.md
-│   ├── troubleshooting-method.md
-│   ├── microsoft-365-playbook.md
-│   └── escalation-matrix.md
-├── tickets/
-│   ├── INC-001-password-lockout.md
-│   ├── INC-002-no-internet.md
-│   ├── INC-003-outlook-not-syncing.md
-│   ├── INC-004-slow-windows-pc.md
-│   ├── INC-005-shared-drive-access.md
-│   └── INC-006-teams-microphone.md
-└── scripts/
-    ├── Get-SystemHealth.ps1
-    ├── Test-NetworkConnectivity.ps1
-    └── Get-UserSupportSnapshot.ps1
-```
+## Things I've already documented
 
-## Troubleshooting Workflow
+### Support tickets
 
-I use the same basic process for each incident:
+These are practice incidents. I deliberately keep some of them short because real ticket notes are usually not essays.
 
-1. **Confirm impact** — who is affected, what is failing, and when it started.
-2. **Collect evidence** — error messages, recent changes, device/network state and logs.
-3. **Form a hypothesis** — identify the most likely cause before changing anything.
-4. **Test safely** — start with low-risk checks and reversible changes.
-5. **Verify the fix** — confirm the original task works from the user's perspective.
-6. **Document** — record symptoms, actions, root cause and final outcome.
-7. **Escalate when required** — provide the next team with useful evidence rather than simply forwarding the ticket.
+- [INC-001 — account locked](tickets/INC-001-password-lockout.md)
+- [INC-002 — Wi-Fi connected but no internet](tickets/INC-002-no-internet.md)
+- [INC-003 — Outlook not syncing](tickets/INC-003-outlook-not-syncing.md)
+- [INC-004 — slow Windows PC](tickets/INC-004-slow-windows-pc.md)
+- [INC-005 — shared drive access denied](tickets/INC-005-shared-drive-access.md)
+- [INC-006 — Teams microphone issue](tickets/INC-006-teams-microphone.md)
 
-More detail: [Troubleshooting Method](docs/troubleshooting-method.md)
+### PowerShell
 
-## Incident Portfolio
+I wrote three read-only scripts for common first-line checks:
 
-| Ticket | Scenario | Skills Demonstrated | Outcome |
-|---|---|---|---|
-| [INC-001](tickets/INC-001-password-lockout.md) | User cannot sign in | Identity, account lockout, verification | Resolved at L1 |
-| [INC-002](tickets/INC-002-no-internet.md) | Laptop has no internet | DHCP, DNS, TCP/IP, `ipconfig`, `ping` | Resolved at L1 |
-| [INC-003](tickets/INC-003-outlook-not-syncing.md) | Outlook stops receiving mail | Outlook, connectivity, profile/cache checks | Resolved at L1 |
-| [INC-004](tickets/INC-004-slow-windows-pc.md) | Windows PC is very slow | Task Manager, startup apps, disk/RAM checks | Resolved at L1 |
-| [INC-005](tickets/INC-005-shared-drive-access.md) | Shared drive access denied | Permissions, scope analysis, escalation | Escalated with evidence |
-| [INC-006](tickets/INC-006-teams-microphone.md) | Microphone fails in Teams | Windows privacy, device selection, Teams | Resolved at L1 |
+- [`Get-SystemHealth.ps1`](scripts/Get-SystemHealth.ps1) — OS, uptime, RAM, disk and adapter state
+- [`Test-NetworkConnectivity.ps1`](scripts/Test-NetworkConnectivity.ps1) — local TCP/IP, gateway, internet and DNS checks
+- [`Get-UserSupportSnapshot.ps1`](scripts/Get-UserSupportSnapshot.ps1) — basic info that could be attached to an escalation
 
-## PowerShell Toolkit
+I still need to run these in the Windows VM and save actual sample output. I don't want to pretend a script has been tested when I haven't tested it yet.
 
-### `Get-SystemHealth.ps1`
-Collects common first-line information including Windows version, uptime, CPU, RAM, disk space and network adapter state.
+## How I troubleshoot
 
-### `Test-NetworkConnectivity.ps1`
-Tests the local TCP/IP stack, default gateway, external IP connectivity and DNS resolution to help isolate network faults.
+The main thing I'm trying to practise is not jumping straight to a fix.
 
-### `Get-UserSupportSnapshot.ps1`
-Creates a compact support snapshot containing logged-on user, hostname, IP configuration, DNS servers and recent system errors.
+For most tickets I try to answer these questions first:
 
-Run scripts from PowerShell:
+1. Is it one user or multiple users?
+2. Is the problem the account, device, application or network?
+3. What changed recently?
+4. What evidence can I collect before changing anything?
+5. Can I test a low-risk theory first?
+6. After the fix, can the user complete the original task?
 
-```powershell
-Set-ExecutionPolicy -Scope Process Bypass
-.\scripts\Get-SystemHealth.ps1
-.\scripts\Test-NetworkConnectivity.ps1
-.\scripts\Get-UserSupportSnapshot.ps1
-```
+My longer notes are in [troubleshooting-method.md](docs/troubleshooting-method.md).
 
-## Microsoft 365 Scenarios
+## Lab notes
 
-The [Microsoft 365 Support Playbook](docs/microsoft-365-playbook.md) covers first-line checks for:
+I am also keeping less polished notes here: [lab-notes.md](lab-notes.md).
 
-- Outlook sign-in and sync issues
-- Teams audio/video issues
-- OneDrive sync problems
-- Licensing symptoms
-- MFA and sign-in problems
-- When to escalate to a Microsoft 365 / identity administrator
+This is where I record things that did not work, commands I had to look up, assumptions that turned out to be wrong, and what I want to retry later.
 
-## What This Project Demonstrates
+## Tools / topics covered
 
-**Technical:** Windows 10/11, TCP/IP, DNS, DHCP, Microsoft 365 troubleshooting, account support, PowerShell and incident diagnosis.
+Windows 10/11 · Windows Server · Active Directory · DNS · DHCP · TCP/IP · Microsoft 365 · Outlook · Teams · permissions · PowerShell · ticket documentation · escalation
 
-**Service Desk:** ticket ownership, user communication, prioritisation, documentation, verification, knowledge-base thinking and evidence-based escalation.
+## Next target
 
-**Professional approach:** I avoid making high-impact changes without evidence, protect user data, document what I changed and confirm service restoration before closing an incident.
+Once the Active Directory lab is working, I want the repo to contain real evidence rather than just written scenarios:
 
-## Next Improvements
-
-- Add a Windows Server / Active Directory virtual lab.
-- Add Group Policy and mapped-drive scenarios.
-- Add Microsoft Intune device-management scenarios.
-- Add a lightweight ticket analytics dashboard.
-- Expand the PowerShell toolkit with safe remote-support diagnostics.
+- screenshots from Server Manager / AD Users and Computers
+- domain-joined client screenshot
+- users and security groups I created
+- mapped/shared drive permission test
+- a Group Policy test
+- PowerShell output from the lab machines
+- one intentionally broken scenario and the troubleshooting notes from fixing it
 
 ---
 
-**Portfolio project by Xitong Wang**  
-Built to demonstrate practical entry-level IT Support / Service Desk capability.
+**Xitong Wang**  
+IT Support / Service Desk learning portfolio
