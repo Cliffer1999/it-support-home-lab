@@ -2,47 +2,60 @@
 
 ## Scenario
 
-This home lab represents a fictional small business with approximately 50 employees. The Service Desk is the first point of contact for Windows, Microsoft 365, identity, endpoint and basic network incidents.
+This home lab represents a small business environment supported by a Level 1 / Service Desk function. The environment covers Windows endpoints, Windows Server, Active Directory, Microsoft 365, identity, networking and common desktop-support scenarios.
 
-## Devices and Services
+## Core Environment
 
-- Windows 10/11 end-user workstations
-- Local Windows accounts for hands-on account administration practice
-- Microsoft 365 / Entra ID scenarios documented conceptually where a production tenant is not available
-- Outlook, Teams and OneDrive
-- DHCP-provided IPv4 configuration
-- DNS resolution through the local router/ISP
-- Wi-Fi and Ethernet connectivity
+- Windows Server domain controller: `DC01`
+- Windows client: `CLIENT01`
+- Active Directory domain: `xitonglab.local`
+- Active Directory Domain Services and DNS
+- Organisational Units for users, computers and departments
+- Security groups for role-based access
+- Shared folders with NTFS/share permissions
+- Group Policy applied to domain-joined clients
+- Windows 11 endpoint administration
+- Microsoft 365 and Entra ID administration scenarios
+- DHCP-based client networking and DNS troubleshooting
 
 ## Technician Toolset
 
-### Windows
-- Settings and Control Panel
+### Windows Administration
+- Server Manager
+- Active Directory Users and Computers
+- Group Policy Management
+- Windows Settings / Control Panel
 - Task Manager
 - Event Viewer
 - Device Manager
 - Services
 - Credential Manager
 
-### Command Line
+### Command Line / PowerShell
 - `ipconfig /all`
 - `ping`
 - `tracert`
 - `nslookup`
 - `whoami`
-- `net user`
-- PowerShell diagnostic commands
+- `gpupdate /force`
+- `gpresult /r`
+- `Get-ADUser`
+- `Get-ADGroup`
+- `Get-NetIPConfiguration`
+- custom support diagnostic scripts in `/scripts`
 
-## Lab Principles
+## Administration Tasks Completed
 
-1. Use fictional data only.
-2. Reproduce faults safely where practical.
-3. Record expected results and actual results.
-4. Prefer reversible troubleshooting steps.
-5. Separate observations from assumptions.
-6. Verify service restoration before marking an incident resolved.
-7. Escalate privileged or infrastructure-level changes instead of bypassing controls.
+- Installed and configured Active Directory Domain Services.
+- Created users, OUs and security groups.
+- Joined a Windows 11 workstation to the domain.
+- Managed passwords, locked accounts and group membership.
+- Configured department-based shared-folder access.
+- Tested Group Policy processing on the client.
+- Diagnosed DNS and general Windows network connectivity issues.
+- Completed Windows 11 endpoint-support scenarios.
+- Documented incidents using Level 1 troubleshooting and escalation notes.
 
-## Future Expansion
+## Lab Approach
 
-The next lab stage will use virtual machines to simulate Windows Server, Active Directory Domain Services, Group Policy, security groups, mapped drives and domain-joined Windows clients.
+The environment is deliberately small so individual problems can be isolated quickly. I used it to practise the relationship between identity, DNS, permissions, endpoint configuration and user-facing symptoms rather than treating each support issue as a separate topic.
