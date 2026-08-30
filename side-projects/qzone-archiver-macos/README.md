@@ -56,13 +56,14 @@ Requirements:
 - Node.js 20+
 - Git
 
+From this repository's `side-projects/qzone-archiver-macos` directory:
+
 ```bash
 git clone https://github.com/salt-fishes/qzone-archiver.git upstream-qzone-archiver
 node scripts/apply-macos-port.mjs upstream-qzone-archiver
 
 cd upstream-qzone-archiver/desktop
-npm ci
-npm run build:renderer
+npm install --no-audit --no-fund
 npm run dist:mac:arm64
 ```
 
@@ -119,4 +120,5 @@ This port preserves upstream attribution and includes the upstream Apache-2.0 li
 ## Status
 
 **macOS port implementation: complete**  
-**Automated macOS build: configured**
+**Automated macOS build: configured**  
+**Primary target: Apple Silicon (M1/M2/M3/M4)**
