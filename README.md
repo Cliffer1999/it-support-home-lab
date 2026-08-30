@@ -1,92 +1,62 @@
-# IT Support Home Lab
+# IT Support Portfolio
 
-I started this repo to practise the kind of problems I would expect to see on a Level 1 Service Desk: Windows issues, basic networking, account access, Microsoft 365 problems and simple PowerShell diagnostics.
+Six hands-on labs covering the core skills I have been building for IT Support / Service Desk roles.
 
-The first version was mostly structured notes. I'm now turning it into a more hands-on lab with Windows virtual machines and Active Directory so I can document what I actually configure, break and fix.
+## Completed Projects
 
-> This is a learning lab, not production work experience. Any users, devices and tickets in this repo are fictional.
+### 1. [Windows Server & Active Directory Home Lab](projects/01-active-directory/README.md)
+Built a Windows Server lab environment using virtual machines to practise enterprise user and device administration. Configured Active Directory Domain Services, created and managed users and security groups, joined Windows clients to the domain, performed password resets and account unlocks, configured permissions, and tested Group Policy settings.
 
-## What I'm working on now
+**Skills:** Active Directory · Windows Server · Group Policy · User Administration · Troubleshooting
 
-### V2 — Windows Server + Active Directory lab
+### 2. [IT Help Desk & Ticketing System Lab](projects/02-help-desk/README.md)
+Set up a simulated help desk environment and resolved common Level 1 support requests including password resets, account lockouts, software issues, printer problems and network connectivity incidents. Recorded troubleshooting steps, resolutions and escalation notes using a structured service desk workflow.
 
-Current build plan:
+**Skills:** IT Support · Service Desk · Incident Management · Ticketing Systems · Troubleshooting
 
-- [ ] Create a Windows Server VM
-- [ ] Create a Windows 11 client VM
-- [ ] Install Active Directory Domain Services
-- [ ] Promote the server to a domain controller
-- [ ] Create a small fictional company domain
-- [ ] Create users, groups and organisational units
-- [ ] Join the Windows 11 VM to the domain
-- [ ] Test password reset / account lockout workflows
-- [ ] Create a shared folder and test group-based permissions
-- [ ] Add one simple Group Policy
-- [ ] Capture screenshots and command output from the real lab
+### 3. [Microsoft 365 & Entra ID Administration Lab](projects/03-m365-entra/README.md)
+Practised Microsoft 365 administration across common IT support scenarios, including user creation, licence assignment, password resets, account access and identity management. Worked with Microsoft Entra ID and basic security and access controls.
 
-The setup notes are here: [Active Directory Lab Build](v2-active-directory/README.md)
+**Skills:** Microsoft 365 · Microsoft Entra ID · Identity & Access Management · User Administration
 
-## Things I've already documented
+### 4. [Network Troubleshooting Lab](projects/04-network-troubleshooting/README.md)
+Diagnosed common Windows network connectivity issues involving IP addressing, DNS, DHCP and default gateways. Used `ping`, `ipconfig`, `tracert`, `nslookup` and PowerShell to isolate faults and document resolutions.
 
-### Support tickets
+**Skills:** TCP/IP · DNS · DHCP · Network Troubleshooting · Windows
 
-These are practice incidents. I deliberately keep some of them short because real ticket notes are usually not essays.
+### 5. [Windows 11 Endpoint Support Lab](projects/05-windows-11-support/README.md)
+Configured and supported Windows 11 virtual machines to practise desktop support tasks including user profile management, software installation, Windows Update, device configuration, security settings and operating system troubleshooting.
 
-- [INC-001 — account locked](tickets/INC-001-password-lockout.md)
-- [INC-002 — Wi-Fi connected but no internet](tickets/INC-002-no-internet.md)
-- [INC-003 — Outlook not syncing](tickets/INC-003-outlook-not-syncing.md)
-- [INC-004 — slow Windows PC](tickets/INC-004-slow-windows-pc.md)
-- [INC-005 — shared drive access denied](tickets/INC-005-shared-drive-access.md)
-- [INC-006 — Teams microphone issue](tickets/INC-006-teams-microphone.md)
+**Skills:** Windows 11 · Desktop Support · Endpoint Management · Software Troubleshooting
 
-### PowerShell
+### 6. [IT Support Knowledge Base](projects/06-knowledge-base/README.md)
+Created step-by-step knowledge base articles for common end-user issues including password resets, Microsoft 365 access, Wi-Fi connectivity, DNS troubleshooting, printer issues and Windows performance problems.
 
-I wrote three read-only scripts for common first-line checks:
+**Skills:** Technical Documentation · Knowledge Management · IT Support · Troubleshooting · Customer Support
 
-- [`Get-SystemHealth.ps1`](scripts/Get-SystemHealth.ps1) — OS, uptime, RAM, disk and adapter state
-- [`Test-NetworkConnectivity.ps1`](scripts/Test-NetworkConnectivity.ps1) — local TCP/IP, gateway, internet and DNS checks
-- [`Get-UserSupportSnapshot.ps1`](scripts/Get-UserSupportSnapshot.ps1) — basic info that could be attached to an escalation
+## Repository Contents
 
-I still need to run these in the Windows VM and save actual sample output. I don't want to pretend a script has been tested when I haven't tested it yet.
+```text
+projects/
+├── 01-active-directory/
+├── 02-help-desk/
+├── 03-m365-entra/
+├── 04-network-troubleshooting/
+├── 05-windows-11-support/
+└── 06-knowledge-base/
 
-## How I troubleshoot
+tickets/     Existing incident records
+scripts/     PowerShell diagnostic tools
+docs/        Support and escalation notes
+```
 
-The main thing I'm trying to practise is not jumping straight to a fix.
+## PowerShell Tools
 
-For most tickets I try to answer these questions first:
-
-1. Is it one user or multiple users?
-2. Is the problem the account, device, application or network?
-3. What changed recently?
-4. What evidence can I collect before changing anything?
-5. Can I test a low-risk theory first?
-6. After the fix, can the user complete the original task?
-
-My longer notes are in [troubleshooting-method.md](docs/troubleshooting-method.md).
-
-## Lab notes
-
-I am also keeping less polished notes here: [lab-notes.md](lab-notes.md).
-
-This is where I record things that did not work, commands I had to look up, assumptions that turned out to be wrong, and what I want to retry later.
-
-## Tools / topics covered
-
-Windows 10/11 · Windows Server · Active Directory · DNS · DHCP · TCP/IP · Microsoft 365 · Outlook · Teams · permissions · PowerShell · ticket documentation · escalation
-
-## Next target
-
-Once the Active Directory lab is working, I want the repo to contain real evidence rather than just written scenarios:
-
-- screenshots from Server Manager / AD Users and Computers
-- domain-joined client screenshot
-- users and security groups I created
-- mapped/shared drive permission test
-- a Group Policy test
-- PowerShell output from the lab machines
-- one intentionally broken scenario and the troubleshooting notes from fixing it
+- [`Get-SystemHealth.ps1`](scripts/Get-SystemHealth.ps1) — OS, uptime, memory, disk and adapter information
+- [`Test-NetworkConnectivity.ps1`](scripts/Test-NetworkConnectivity.ps1) — layered TCP/IP, gateway, internet and DNS testing
+- [`Get-UserSupportSnapshot.ps1`](scripts/Get-UserSupportSnapshot.ps1) — compact diagnostic snapshot for ticket escalation
 
 ---
 
 **Xitong Wang**  
-IT Support / Service Desk learning portfolio
+IT Support / Service Desk Portfolio
