@@ -1,0 +1,73 @@
+name: Build QZone Archiver macOS
+
+on:
+  push:
+    paths:
+      - 'side-projects/qzone-archiver-macos/**'
+      - '.github/workflows/build-qzone-macos.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-macos:
+    name: macOS ${{ matrix.arch }}
+    runs-on: macos-14
+    strategy:
+      fail-fast: false
+      matrix:
+        arch:
+          - arm64
+          - x64
+
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      UPSTREAM_COMMIT: 63967a184b44ea3eaf339f0abac72bb5244c0a75
+
+    steps:
+      - name: Checkout macOS port
+        uses: actions/checkout@v4
+        with:
+          path: port
+
+      - name: Checkout upstream qzone-archiver v4.0.0
+        uses: actions/checkout@v4
+        with:
+          repository: salt-fishes/qzone-archiver
+          ref: ${{ env.UPSTREAM_COMMIT }}
+          path: upstream
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Apply macOS port
+        run: node port/side-projects/qzone-archiver-macos/scripts/apply-macos-port.mjs upstream
+
+      - name: Install desktop dependencies
+        working-directory: upstream/desktop
+        run: npm install --no-audit --no-fund
+
+      - name: Build renderer
+        working-directory: upstream/desktop
+        run: npm run build:renderer
+
+      - name: Package macOS application
+        working-directory: upstream/desktop
+        run: npx electron-builder --mac --${{ matrix.arch }}
+
+      - name: Show build output
+        working-directory: upstream/desktop
+        run: find release -maxdepth 2 -type f -print
+
+      - name: Upload macOS package
+        uses: actions/upload-artifact@v4
+        with:
+          name: QZoneArchiver-macOS-${{ matrix.arch }}
+          path: |
+            upstream/desktop/release/*.dmg
+            upstream/desktop/release/*.zip
+          if-no-files-found: error
+          retention-days: 14
