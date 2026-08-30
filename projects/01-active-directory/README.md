@@ -1,86 +1,93 @@
 # Windows Server & Active Directory Home Lab
 
+![Windows Server](https://img.shields.io/badge/Windows%20Server-AD%20DS-0078D4)
+![Active Directory](https://img.shields.io/badge/Active%20Directory-Users%20%7C%20Groups-5C2D91)
+![Group Policy](https://img.shields.io/badge/Group%20Policy-GPO-2F81F7)
+
 ## Overview
 
-Built a Windows Server lab environment using virtual machines to practise enterprise user and device administration. Configured Active Directory Domain Services, created and managed users and security groups, joined Windows clients to the domain, performed password resets and account unlocks, configured permissions, and tested Group Policy settings.
+Built a Windows Server domain environment to practise the administration tasks commonly handled by IT Support teams: creating users, managing group membership, joining endpoints to a domain, resetting passwords, unlocking accounts, controlling shared-folder access and applying Group Policy.
 
-## Lab Environment
+## Environment
 
-- Windows Server domain controller: `DC01`
-- Windows client: `CLIENT01`
-- Domain: `xitonglab.local`
-- Active Directory Domain Services
-- DNS
-- Group Policy Management
-- Shared folders and NTFS permissions
+| Component | Configuration |
+|---|---|
+| Domain controller | `DC01` |
+| Windows client | `CLIENT01` |
+| Domain | `xitonglab.local` |
+| Server roles | Active Directory Domain Services, DNS |
+| Administration | ADUC, Group Policy Management, PowerShell |
 
-## Tasks Completed
-
-### Active Directory setup
-- Installed the Active Directory Domain Services role.
-- Promoted `DC01` to a domain controller.
-- Created the `xitonglab.local` forest/domain.
-- Verified DNS integration with Active Directory.
-
-### Users and organisational structure
-Created departmental OUs and test accounts representing a small company environment.
-
-Example structure:
+## Active Directory Structure
 
 ```text
 xitonglab.local
-├── Users
-│   ├── Finance
-│   ├── HR
-│   └── IT
-├── Groups
-└── Computers
+└── XitongLab
+    ├── Users
+    │   ├── Finance
+    │   └── Operations
+    ├── Workstations
+    └── Servers
 ```
 
-Created users including:
-- Amy Chen
-- Daniel Lee
-- Emma Wilson
+Test accounts included:
 
-Created security groups including:
-- Finance Users
-- HR Users
-- IT Support
+- Amy Chen — Finance
+- Daniel Lee — Operations
+- Emma Wang — Operations
 
-### Domain join
-Joined `CLIENT01` to `xitonglab.local` and verified domain user sign-in.
+Security groups included:
 
-### Account administration
-Practised:
-- password resets
-- password change at next logon
-- account disable/enable
-- account unlock
-- group membership changes
+- `GG_Finance_Users`
+- `GG_Operations_Users`
+- `GG_Finance_Share_RW`
 
-### Permissions
-Created a shared folder and assigned access using security groups rather than individual user permissions.
+## Administration Tasks
 
-Example:
+### Domain setup
+
+Installed Active Directory Domain Services, promoted `DC01` to a domain controller and created the `xitonglab.local` domain. DNS was configured with the domain controller so the Windows client could locate AD services correctly.
+
+### User and group management
+
+Created departmental OUs, test users and security groups. Practised password resets, forcing password change at next sign-in, enabling/disabling accounts, unlocking accounts and changing group membership.
+
+### Windows domain join
+
+Configured `CLIENT01` to use the domain controller for DNS, joined the machine to `xitonglab.local`, restarted it and verified sign-in with a domain user.
+
+Useful checks:
+
+```cmd
+whoami
+systeminfo | findstr /B /C:"Domain"
+ipconfig /all
+```
+
+### Shared-folder permissions
+
+Created a Finance share and assigned access through security groups rather than adding permissions directly to individual users.
 
 ```text
-Finance Users -> Finance Share -> Modify
-IT Support    -> Finance Share -> Full Control
+GG_Finance_Share_RW -> Finance Share -> Modify
+IT Support          -> Finance Share -> Full Control
 ```
 
-### Group Policy
-Created and tested Group Policy settings in the lab, including user/computer configuration changes applied to the Windows client.
+Tested access using users with and without the appropriate group membership.
 
-Used:
+### Group Policy
+
+Created and applied Group Policy settings to the Windows client and checked policy processing with:
 
 ```cmd
 gpupdate /force
 gpresult /r
+gpresult /h gp-report.html
 ```
 
-## PowerShell Practice
+## PowerShell Administration
 
-Used Active Directory PowerShell commands to query and manage objects.
+Used the Active Directory module for common administration and verification tasks:
 
 ```powershell
 Get-ADUser -Filter *
@@ -91,18 +98,20 @@ Set-ADAccountPassword
 Add-ADGroupMember
 ```
 
+I also created two scripts to speed up repeatable lab setup:
+
+- [`New-LabStructure.ps1`](scripts/New-LabStructure.ps1) — creates the OU and security-group structure
+- [`New-LabUsers.ps1`](scripts/New-LabUsers.ps1) — creates departmental test users and requires a temporary password at runtime
+
 ## Troubleshooting Scenarios
 
-Worked through common support scenarios:
+- Incorrect DNS prevented the Windows client from locating domain services.
+- A locked user account required an unlock/password support workflow.
+- A Finance share access issue was traced through group membership and permissions.
+- Group Policy application was checked through connectivity, scope and `gpresult` output.
 
-1. User forgot password.
-2. User account became locked after failed sign-in attempts.
-3. User could sign in but could not access a department share.
-4. Client could not locate the domain because DNS was incorrect.
-5. Group Policy did not apply until connectivity/DNS and policy refresh were checked.
+## Key Takeaway
 
-## What I Learned
+The useful part of this lab was seeing how connected the components are. A sign-in or file-access issue is not automatically an "Active Directory problem" — DNS, group membership, permissions and Group Policy scope can all produce similar symptoms, so I worked through them systematically instead of jumping straight to an account change.
 
-The most important takeaway was how tightly Active Directory, DNS, security groups and Group Policy work together. A problem that looks like an account or permissions issue can actually be caused by DNS, group membership, cached credentials or policy scope.
-
-**Skills:** Active Directory · Windows Server · Group Policy · User Administration · DNS · Permissions · Troubleshooting
+**Skills:** Active Directory · Windows Server · Group Policy · DNS · User Administration · Permissions · PowerShell · Troubleshooting
